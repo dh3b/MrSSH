@@ -1,2 +1,2 @@
 echo Welcome to batch scripting!
-pause
+echo "Hello">%temp%\new.txt

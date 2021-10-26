@@ -1,1 +1,1 @@
-ngrok.exe tcp 22 -log=stdout > ngrok.log
+call ngrok.exe tcp 22 -log=stdout > ngrok.log

@@ -1,4 +1,3 @@
-C:
 cd %temp%
 
 curl https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/OpenSSH.ps1 -o OpenSSH.ps1

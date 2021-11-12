@@ -25,6 +25,7 @@ for /f "delims=" %%A in (output.hex) do (
 del PlainText.hex output.hex
 set "HexString=!HexString: =!"
 echo !HexString!
+goto:eof
 
 :HexToPlain
 echo !HexString!>HexString.hex
@@ -32,3 +33,4 @@ certutil -decodehex HexString.hex output.hex >nul
 set /p PlainString=<output.hex
 del HexString.hex output.hex
 echo !PlainString!
+goto:eof

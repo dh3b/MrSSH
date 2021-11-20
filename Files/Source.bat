@@ -11,7 +11,7 @@ set version=2.0
 :: Check for updates
 for /f %%A in ('curl --silent "https://raw.githubusercontent.com/agamsol/Batch-Projects/main/Discord-Message-Sender/latest.inf"') do set lastversion=%%A
 
-:: Check Detail
+:: Check Details
 set "Silent=%~1"
 set "Mode=%~2"
 set "plugin=%~3"

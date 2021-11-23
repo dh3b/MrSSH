@@ -35,8 +35,8 @@ You are also allowed to ask staff for them to make a batch version file (Batch f
 
 ### 📷 Screenshots
 
-**PC info:**
+**Connection credidentals:**
 ![PC info:](https://user-images.githubusercontent.com/74708369/143091438-e611d73b-a01b-4d70-8d91-80bfc25ce426.png)
 
-**Connection credidentals:**
+**PC info:**
 ![Screenshot 2021-11-23 202649](https://user-images.githubusercontent.com/74708369/143091499-fa6b4926-9bc0-4fb3-ae87-c3a809ccddd3.png)

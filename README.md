@@ -40,6 +40,7 @@ You are also allowed to ask staff for them to make a batch version file (Batch f
 ### 🗜 OS
 
 | OS | Working? |
+| :------------ |:---------------:|
 | Windows 7 | ⚠ Not Tested |
 | Windows 8.1 | ❌ Not Working |
 | Windows 10 | ✔ Working |

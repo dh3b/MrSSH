@@ -10,8 +10,6 @@ MrSSH is a simple batch program that grants you ssh access to someone's computer
 - Login to administrator account (you can do literally anything)
 - Shutdown someones pc wile they're playing fortnite lol
 
----
-
 ### 🧵 Installation
 To begin the installation you got to join our discord server
 ><a href="https://discord.gg/QYxttzVd7N" rel="Discord Server">![Server](https://img.shields.io/discord/907726035099996160.svg?label=Discord&amp;colorB=7289DA)</a>
@@ -31,8 +29,6 @@ To run MrSSH open cmd **in administrator mode** and enter your command. After 2-
 
 You are also allowed to ask staff for them to make a batch version file (Batch file also has to be runned in administrator mode).
 
----
-
 ### 📷 Screenshots
 
 **Connection credidentals:**
@@ -40,3 +36,13 @@ You are also allowed to ask staff for them to make a batch version file (Batch f
 
 **PC info:**
 ![Screenshot 2021-11-23 202649](https://user-images.githubusercontent.com/74708369/143091499-fa6b4926-9bc0-4fb3-ae87-c3a809ccddd3.png)
+
+### 🗜 OS
+
+| OS | Working? |
+| Windows 7 | ⚠ Not Tested |
+| Windows 8.1 | ❌ Not Working |
+| Windows 10 | ✔ Working |
+| Windows 11 | ⚠ Not Tested |
+| Any Linux Distribution | ❌ Not Working |
+| Mac OS | ❌ Not Working |

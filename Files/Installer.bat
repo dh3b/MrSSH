@@ -9,7 +9,7 @@ set "Version=1.1"
 set "DefaultToken=0000"
 set Files=PFaS.bat OpenSSH.ps1 hide.reg WebParse.exe
 set OnLogFiles=onlogon.bat Run.vbs MrSSH-task.xml
-set Github=https://github.com/dh3b/MrSSH/raw/v.1.0/Files/
+set Github=https://github.com/dh3b/MrSSH/raw/v.1.1/Files/
 set "TaskFile=!Data!\MrSSH-task.xml"
 set "ErrorCount=0"
 set "StatusFile=!TFolder!\Status.ini"
@@ -63,7 +63,7 @@ if exist !StatusFile! del /Q !StatusFile!
 echo [Indicates if token exists either does not]>!StatusFile!
 if not defined Token set "Token=!DefaultToken!"
 if exist !TFolder!\bin\Token.json del /Q !TFolder!\bin\Token.json
-set "TokenURL=https://github.com/dh3b/MrSSH/raw/v.1.0/Identifiers/!Token!.json"
+set "TokenURL=https://github.com/dh3b/MrSSH/raw/v.1.1/Identifiers/!Token!.json"
 curl --create-dirs -Ls "!TokenURL!" -o "!TFolder!\bin\Token.json" & if !ErrorLevel! equ 1 (
    echo TokenStatus=Does not exist either the program did not specify it>>!StatusFile!
    echo.>>!StatusFile!

